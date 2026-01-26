@@ -55,7 +55,6 @@ judgeBtn.addEventListener('click', function() {
     
     // 段階的引き上げの説明
     resultHTML += '<div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px; padding: 20px; margin-bottom: 32px;">';
-    resultHTML += '<p style="font-size: 16px; font-weight: 700; color: #856404; margin-bottom: 8px; text-align: center;">⚠️ 制度改定のお知らせ</p>';
     resultHTML += '<p style="font-size: 14px; color: #856404; margin: 0; text-align: center; line-height: 1.6;">高額療養費制度は2026年8月と2027年8月に段階的に引き上げられます。<br>2027年8月からは全ての区分が年収により細分化されます。</p>';
     resultHTML += '</div>';
     
@@ -152,3 +151,4 @@ incomeInput.addEventListener('keypress', function(e) {
         judgeBtn.click();
     }
 });
+
