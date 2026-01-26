@@ -15,13 +15,8 @@ function determineCategory(income) {
 
 /**
  * 区分と時期を指定して自己負担限度額を取得する関数
- * 
- * @param {'ア' | 'イ' | 'ウ' | 'エ'} category - 区分
- * @param {'現行' | 'R8.8'} revision - 時期
- * @returns {{ limit: string, tasuGaito: string, yearLimit: string }}
  */
 function getCategoryDetailsByRevision(category, revision) {
-    // 全時期・全区分のデータ
     const allData = {
         '現行': {
             'ア': { 
@@ -67,7 +62,7 @@ function getCategoryDetailsByRevision(category, revision) {
                 yearLimit: '年間上限：53万円'
             }
         }
-    };  // ← ここで閉じる
+    };
     
     return allData[revision][category];
 }
@@ -81,7 +76,7 @@ function getCategoryADetailR9(income) {
             range: '約1,650万円超', 
             limit: '342,000円 +1%', 
             tasuGaito: '140,100円',
-            yearLimit: '', // 年間上限なし
+            yearLimit: '',
             highlight: income >= 1650
         },
         { 
@@ -95,7 +90,7 @@ function getCategoryADetailR9(income) {
             range: '約1,160〜1,410万円', 
             limit: '270,300円 +1%', 
             tasuGaito: '140,100円',
-            yearLimit: '', // 年間上限なし
+            yearLimit: '',
             highlight: income >= 1160 && income < 1410
         }
     ];
@@ -111,7 +106,7 @@ function getCategoryIDetailR9(income) {
             range: '約1,040〜1,160万円', 
             limit: '209,400円 +1%', 
             tasuGaito: '93,000円',
-            yearLimit: '', // 年間上限なし
+            yearLimit: '',
             highlight: income >= 1040 && income < 1160
         },
         { 
@@ -125,7 +120,7 @@ function getCategoryIDetailR9(income) {
             range: '約770〜950万円', 
             limit: '179,100円 +1%', 
             tasuGaito: '93,000円',
-            yearLimit: '', // 年間上限なし
+            yearLimit: '',
             highlight: income >= 770 && income < 950
         }
     ];
@@ -141,7 +136,7 @@ function getCategoryUDetailR9(income) {
             range: '約650〜770万円', 
             limit: '110,400円 +1%', 
             tasuGaito: '44,400円',
-            yearLimit: '', // 年間上限なし
+            yearLimit: '',
             highlight: income >= 650 && income < 770
         },
         { 
@@ -155,7 +150,7 @@ function getCategoryUDetailR9(income) {
             range: '約370〜510万円', 
             limit: '85,800円 +1%', 
             tasuGaito: '44,400円',
-            yearLimit: '', // 年間上限なし
+            yearLimit: '',
             highlight: income >= 370 && income < 510
         }
     ];
