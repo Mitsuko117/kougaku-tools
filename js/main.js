@@ -40,7 +40,6 @@ judgeBtn.addEventListener('click', function() {
     // 5. 各時期のデータを取得
     const detailsGenkyo = getCategoryDetailsByRevision(category, '現行');
     const detailsR8 = getCategoryDetailsByRevision(category, 'R8.8');
-    const detailsR9 = getCategoryDetailsByRevision(category, 'R9.8');
     
     // 6. 結果を表示
     let resultHTML = '';
@@ -162,3 +161,4 @@ incomeInput.addEventListener('keypress', function(e) {
         judgeBtn.click();
     }
 });
+
