@@ -17,7 +17,7 @@ function determineCategory(income) {
  * 区分と時期を指定して自己負担限度額を取得する関数
  * 
  * @param {'ア' | 'イ' | 'ウ' | 'エ'} category - 区分
- * @param {'現行' | 'R8.8' | 'R9.8'} revision - 時期
+ * @param {'現行' | 'R8.8'} revision - 時期
  * @returns {{ limit: string, tasuGaito: string, yearLimit: string }}
  */
 function getCategoryDetailsByRevision(category, revision) {
@@ -30,7 +30,7 @@ function getCategoryDetailsByRevision(category, revision) {
                 yearLimit: ''
             },
             'イ': { 
-                limit: '167,400円+（医療費-558,000円）×1%', 
+                limit: '167,400円+（医療費-558,000円）×1%',  
                 tasuGaito: '93,000円',
                 yearLimit: ''
             },
@@ -47,17 +47,17 @@ function getCategoryDetailsByRevision(category, revision) {
         },
         'R8.8': {
             'ア': { 
-                limit: '270,300円+（医療費-901,000円）×1%', 
+                limit: '270,300円 +1%', 
                 tasuGaito: '140,100円',
                 yearLimit: '年間上限：168万円'
             },
             'イ': { 
-                limit: '179,100円+（医療費-597,000円）×1%', 
+                limit: '179,100円 +1%',  
                 tasuGaito: '93,000円',
                 yearLimit: '年間上限：111万円'
             },
             'ウ': { 
-                limit: '85,800円+（医療費-286,000円）×1%', 
+                limit: '85,800円 +1%', 
                 tasuGaito: '44,400円',
                 yearLimit: '年間上限：53万円'
             },
@@ -66,30 +66,8 @@ function getCategoryDetailsByRevision(category, revision) {
                 tasuGaito: '44,400円',
                 yearLimit: '年間上限：53万円'
             }
-        },
-        'R9.8': {
-            'ア': { 
-                limit: '270,300円〜342,000円+1%（年収により3段階）', 
-                tasuGaito: '140,100円',
-                yearLimit: ''
-            },
-            'イ': { 
-                limit: '179,100円〜209,400円+1%（年収により3段階）', 
-                tasuGaito: '93,000円',
-                yearLimit: ''
-            },
-            'ウ': { 
-                limit: '85,800円〜110,400円+1%（年収により3段階）', 
-                tasuGaito: '44,400円',
-                yearLimit: ''
-            },
-            'エ': { 
-                limit: '61,500円〜69,600円（年収により3段階）', 
-                tasuGaito: '34,500円〜44,400円',
-                yearLimit: ''
-            }
         }
-    };
+    };  // ← ここで閉じる
     
     return allData[revision][category];
 }
@@ -101,21 +79,21 @@ function getCategoryADetailR9(income) {
     const details = [
         { 
             range: '約1,650万円超', 
-            limit: '342,000円+（医療費-1,140,000円）×1%', 
+            limit: '342,000円 +1%', 
             tasuGaito: '140,100円',
             yearLimit: '', // 年間上限なし
             highlight: income >= 1650
         },
         { 
             range: '約1,410〜1,650万円', 
-            limit: '303,000円+（医療費-1,010,000円）×1%', 
+            limit: '303,000円 +1%', 
             tasuGaito: '140,100円',
             yearLimit: '年間上限：168万円',
             highlight: income >= 1410 && income < 1650
         },
         { 
             range: '約1,160〜1,410万円', 
-            limit: '270,300円+（医療費-901,000円）×1%', 
+            limit: '270,300円 +1%', 
             tasuGaito: '140,100円',
             yearLimit: '', // 年間上限なし
             highlight: income >= 1160 && income < 1410
@@ -131,21 +109,21 @@ function getCategoryIDetailR9(income) {
     const details = [
         { 
             range: '約1,040〜1,160万円', 
-            limit: '209,400円+（医療費-698,000円）×1%', 
+            limit: '209,400円 +1%', 
             tasuGaito: '93,000円',
             yearLimit: '', // 年間上限なし
             highlight: income >= 1040 && income < 1160
         },
         { 
             range: '約950〜1,040万円', 
-            limit: '194,400円+（医療費-648,000円）×1%', 
+            limit: '194,400円 +1%',  
             tasuGaito: '93,000円',
             yearLimit: '年間上限：111万円',
             highlight: income >= 950 && income < 1040
         },
         { 
             range: '約770〜950万円', 
-            limit: '179,100円+（医療費-597,000円）×1%', 
+            limit: '179,100円 +1%', 
             tasuGaito: '93,000円',
             yearLimit: '', // 年間上限なし
             highlight: income >= 770 && income < 950
@@ -161,21 +139,21 @@ function getCategoryUDetailR9(income) {
     const details = [
         { 
             range: '約650〜770万円', 
-            limit: '110,400円+（医療費-368,000円）×1%', 
+            limit: '110,400円 +1%', 
             tasuGaito: '44,400円',
             yearLimit: '', // 年間上限なし
             highlight: income >= 650 && income < 770
         },
         { 
             range: '約510〜650万円', 
-            limit: '98,100円+（医療費-327,000円）×1%', 
+            limit: '98,100円 +1%', 
             tasuGaito: '44,400円',
             yearLimit: '年間上限：53万円',
             highlight: income >= 510 && income < 650
         },
         { 
             range: '約370〜510万円', 
-            limit: '85,800円+（医療費-286,000円）×1%', 
+            limit: '85,800円 +1%', 
             tasuGaito: '44,400円',
             yearLimit: '', // 年間上限なし
             highlight: income >= 370 && income < 510
@@ -213,5 +191,3 @@ function getCategoryEDetailR9(income) {
     ];
     return details;
 }
-
-
