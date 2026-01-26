@@ -36,9 +36,13 @@ judgeBtn.addEventListener('click', function() {
     
     // 4. 区分を判定
     const category = determineCategory(incomeNum);
-    const details = getCategoryDetails(category);
     
-    // 5. 結果を表示
+    // 5. 各時期のデータを取得
+    const detailsGenkyo = getCategoryDetailsByRevision(category, '現行');
+    const detailsR8 = getCategoryDetailsByRevision(category, 'R8.8');
+    const detailsR9 = getCategoryDetailsByRevision(category, 'R9.8');
+    
+    // 6. 結果を表示
     let resultHTML = '';
     
     // 結果カード開始
@@ -49,17 +53,68 @@ judgeBtn.addEventListener('click', function() {
     resultHTML += '<p style="font-size: 56px; font-weight: 700; color: #2d6f4d; text-align: center; margin: 32px 0;">「' + category + '」</p>';
     resultHTML += '<p style="font-size: 18px; color: #3d3d3d; text-align: center; margin-bottom: 32px;">です</p>';
     
-    // 自己負担限度額
-    resultHTML += '<div style="background: #e8f8f0; padding: 32px; border-radius: 14px; margin: 32px 0;">';
-    resultHTML += '<p style="font-size: 16px; font-weight: 600; color: #6b6b6b; margin-bottom: 12px; text-align: center;">自己負担限度額</p>';
-    resultHTML += '<p style="font-size: 28px; font-weight: 700; color: #2d6f4d; text-align: center;">' + details.limit + '</p>';
+    // 段階的引き上げの説明
+    resultHTML += '<div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px; padding: 20px; margin-bottom: 32px;">';
+    resultHTML += '<p style="font-size: 16px; font-weight: 700; color: #856404; margin-bottom: 8px; text-align: center;">⚠️ 制度改定のお知らせ</p>';
+    resultHTML += '<p style="font-size: 14px; color: #856404; margin: 0; text-align: center; line-height: 1.6;">高額療養費制度は2026年8月と2027年8月に段階的に引き上げられます。<br>2027年8月からは全ての区分が年収により細分化されます。</p>';
     resultHTML += '</div>';
     
-    // 多数該当
-    resultHTML += '<div style="background: #fffbf7; padding: 20px; border-radius: 10px; margin-top: 20px;">';
-    resultHTML += '<div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 2px solid #f8dce8; font-size: 15px; font-weight: 600;">';
-    resultHTML += '<span style="color: #6b6b6b;">多数該当の場合</span>';
-    resultHTML += '<span style="color: #a14774; font-size: 20px; font-weight: 700;">' + details.tasuGaito + '</span>';
+    // 3つの時期を横並びで表示（PC）/ 縦並びで表示（スマホ）
+    resultHTML += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 32px 0;">';
+    
+    // 現行（〜2026年7月）
+    resultHTML += '<div style="background: #e8f8f0; border: 3px solid #2d6f4d; border-radius: 12px; padding: 24px;">';
+    resultHTML += '<p style="font-size: 16px; font-weight: 700; color: #2d6f4d; text-align: center; margin-bottom: 16px;">〜2026年7月</p>';
+    resultHTML += '<p style="font-size: 14px; color: #666; margin-bottom: 8px;">自己負担限度額</p>';
+    resultHTML += '<p style="font-size: 20px; font-weight: 700; color: #2d6f4d; margin-bottom: 16px;">' + detailsGenkyo.limit + '</p>';
+    resultHTML += '<p style="font-size: 14px; color: #666; margin-bottom: 8px;">多数該当</p>';
+    resultHTML += '<p style="font-size: 18px; font-weight: 700; color: #a14774;">' + detailsGenkyo.tasuGaito + '</p>';
+    resultHTML += '</div>';
+    
+    // 2026年8月〜
+    resultHTML += '<div style="background: #fff8e1; border: 3px solid #ffa726; border-radius: 12px; padding: 24px;">';
+    resultHTML += '<p style="font-size: 16px; font-weight: 700; color: #f57c00; text-align: center; margin-bottom: 16px;">2026年8月〜</p>';
+    resultHTML += '<p style="font-size: 14px; color: #666; margin-bottom: 8px;">自己負担限度額</p>';
+    resultHTML += '<p style="font-size: 20px; font-weight: 700; color: #f57c00; margin-bottom: 16px;">' + detailsR8.limit + '</p>';
+    resultHTML += '<p style="font-size: 14px; color: #666; margin-bottom: 8px;">多数該当</p>';
+    resultHTML += '<p style="font-size: 18px; font-weight: 700; color: #a14774; margin-bottom: ' + (detailsR8.yearLimit ? '12px' : '0') + ';">' + detailsR8.tasuGaito + '</p>';
+    if (detailsR8.yearLimit) {
+        resultHTML += '<p style="font-size: 13px; color: #f57c00; font-weight: 600; text-align: center;">' + detailsR8.yearLimit + '</p>';
+    }
+    resultHTML += '</div>';
+    
+    // 2027年8月〜（該当範囲のみ表示）
+    resultHTML += '<div style="background: #ffebee; border: 3px solid #ef5350; border-radius: 12px; padding: 24px;">';
+    resultHTML += '<p style="font-size: 16px; font-weight: 700; color: #c62828; text-align: center; margin-bottom: 16px;">2027年8月〜</p>';
+    
+    // 区分ごとに該当する細分化データを取得
+    let applicableDetail = null;
+    if (category === 'ア') {
+        const details = getCategoryADetailR9(incomeNum);
+        applicableDetail = details.find(d => d.highlight);
+    } else if (category === 'イ') {
+        const details = getCategoryIDetailR9(incomeNum);
+        applicableDetail = details.find(d => d.highlight);
+    } else if (category === 'ウ') {
+        const details = getCategoryUDetailR9(incomeNum);
+        applicableDetail = details.find(d => d.highlight);
+    } else if (category === 'エ') {
+        const details = getCategoryEDetailR9(incomeNum);
+        applicableDetail = details.find(d => d.highlight);
+    }
+    
+    // 該当する範囲のみ表示
+    if (applicableDetail) {
+        resultHTML += '<p style="font-size: 13px; color: #c62828; font-weight: 600; text-align: center; margin-bottom: 12px;">（' + applicableDetail.range + '）</p>';
+        resultHTML += '<p style="font-size: 14px; color: #666; margin-bottom: 8px;">自己負担限度額</p>';
+        resultHTML += '<p style="font-size: 20px; font-weight: 700; color: #c62828; margin-bottom: 16px;">' + applicableDetail.limit + '</p>';
+        resultHTML += '<p style="font-size: 14px; color: #666; margin-bottom: 8px;">多数該当</p>';
+        resultHTML += '<p style="font-size: 18px; font-weight: 700; color: #a14774; margin-bottom: ' + (applicableDetail.yearLimit ? '12px' : '0') + ';">' + applicableDetail.tasuGaito + '</p>';
+        if (applicableDetail.yearLimit) {
+            resultHTML += '<p style="font-size: 13px; color: #c62828; font-weight: 600; text-align: center;">' + applicableDetail.yearLimit + '</p>';
+        }
+    }
+    
     resultHTML += '</div>';
     resultHTML += '</div>';
     
