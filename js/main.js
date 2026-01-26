@@ -117,10 +117,21 @@ judgeBtn.addEventListener('click', function() {
     resultHTML += '</div>';
     resultHTML += '</div>';
     
-    // 注意書き
-    resultHTML += '<p style="font-size: 13px; color: #6b6b6b; background: #fffbf7; padding: 20px; border-radius: 10px; margin-top: 20px; line-height: 1.8;">';
-    resultHTML += '※多数該当：直近12ヶ月で3ヶ月以上（連続しなくてもよい）高額療養費制度を利用し、医療費の払い戻しを受けた場合、4ヶ月目以降は自己負担限度額が引き下げられます。';
-    resultHTML += '</p>';
+// 注意書き
+resultHTML += '<div style="background: #fffbf7; padding: 20px; border-radius: 10px; margin-top: 20px;">';
+
+// 多数該当の説明
+resultHTML += '<p style="font-size: 13px; color: #6b6b6b; line-height: 1.8; margin-bottom: 12px;">';
+resultHTML += '※<strong>多数該当：</strong>直近12ヶ月で3ヶ月以上（連続しなくてもよい）高額療養費制度を利用し、医療費の払い戻しを受けた場合、4ヶ月目以降は自己負担限度額が引き下げられます。';
+resultHTML += '</p>';
+
+// +1%の説明（新規追加）
+resultHTML += '<p style="font-size: 13px; color: #6b6b6b; line-height: 1.8; margin: 0;">';
+resultHTML += '※<strong>2026年8月以降の+1%について：</strong>自己負担限度額の「+1%」は、医療費が一定額を超えた場合、その超過分の1%が加算されることを意味します。';
+resultHTML += '</p>';
+
+resultHTML += '</div>';
+
     
     // 結果カード終了
     resultHTML += '</div>';
@@ -151,4 +162,3 @@ incomeInput.addEventListener('keypress', function(e) {
         judgeBtn.click();
     }
 });
-
